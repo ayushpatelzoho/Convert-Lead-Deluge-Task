@@ -1,0 +1,60 @@
+leadId = 6777422000000638999;
+leadRec = zoho.crm.getRecordById("Leads",leadId);
+contactMap = Map();
+if(leadRec.get("First_Name") != null)
+{
+	contactMap.put("First_Name",leadRec.get("First_Name"));
+}
+if(leadRec.get("Last_Name") != null)
+{
+	contactMap.put("Last_Name",leadRec.get("Last_Name"));
+	// mandatory
+}
+if(leadRec.get("Email") != null)
+{
+	contactMap.put("Email",leadRec.get("Email"));
+}
+if(leadRec.get("Mobile") != null)
+{
+	contactMap.put("Mobile",leadRec.get("Mobile"));
+}
+if(leadRec.get("Country") != null)
+{
+	contactMap.put("Mailing_Country",leadRec.get("Country"));
+}
+if(leadRec.get("Lead_Source") != null)
+{
+	contactMap.put("Lead_Source",leadRec.get("Lead_Source"));
+}
+dealMap = Map();
+// Deal Name (mandatory)
+if(leadRec.get("Company") != null)
+{
+	dealMap.put("Deal_Name",leadRec.get("Company"));
+}
+else
+{
+	dealMap.put("Deal_Name","Deal from Lead " + leadId);
+}
+// Stage (mandatory – must match CRM exactly)
+if(leadRec.get("Lead_Status") != null)
+{
+	dealMap.put("Stage",leadRec.get("Lead_Status"));
+}
+else
+{
+	dealMap.put("Stage","Qualification");
+	// Closing Date (mandatory)
+	dealMap.put("Closing_Date",zoho.currentdate.addDay(30));
+}
+// Optional fields
+if(leadRec.get("City") != null)
+{
+	dealMap.put("City",leadRec.get("City"));
+}
+convertMap = Map();
+// convertMap.put("Contacts",contactMap);
+convertMap.put("Deals",dealMap);
+response = zoho.crm.convertLead(leadId,convertMap);
+info response;
+return "";
