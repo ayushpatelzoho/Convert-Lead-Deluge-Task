@@ -1,0 +1,29 @@
+leadInfo = zoho.crm.getRecordById("Leads",leadID);
+// info leadInfo ;
+if(leadInfo.get("First_Name") == "" || leadInfo.get("First_Name") == null)
+{
+	dealName = leadInfo.get("Last_Name");
+}
+else
+{
+	dealName = leadInfo.get("First_Name") + " " + leadInfo.get("Last_Name");
+}
+deal_values = Map();
+deal_values.put("Deal_Name",dealName);
+deal_values.put("Closing_Date",zoho.currentdate);
+deal_values.put("Stage","YourStageNameHere");
+//  
+conversion_map = Map();
+conversion_map.put("overwrite",true);
+conversion_map.put("Deals",deal_values);
+// 
+existingContact = zoho.crm.searchRecords("Contacts","(Email:equals:" + email + ")");
+// 	info existingContact ;
+if(existingContact.size() > 0)
+{
+	existingContactID = existingContact.get(0).get("id");
+	conversion_map.put("Contacts",existingContactID);
+}
+// info conversion_map;
+response = zoho.crm.convertLead(leadID,conversion_map);
+info response;
